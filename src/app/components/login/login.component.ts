@@ -1,3 +1,4 @@
+// LoginComponent TypeScript
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
@@ -8,11 +9,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class LoginComponent {
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService) {}
 
-  }
-
-  logIn(email: string, password: string) {
+  logIn() {
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
     this.authService.logInWithEmailAndPassword(email, password);
   }
 

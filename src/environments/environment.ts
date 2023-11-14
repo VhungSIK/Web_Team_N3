@@ -1,10 +1,12 @@
 export const environment = {
   firebase: {
-    projectId: 'fireauth-test-4af2e',
-    appId: '1:845151277427:web:f21e584716aa32a4463506',
-    storageBucket: 'fireauth-test-4af2e.appspot.com',
-    apiKey: 'AIzaSyA-j_hTEEJy9N6BPoAEk9sIcn-bI6kH4ok',
-    authDomain: 'fireauth-test-4af2e.firebaseapp.com',
-    messagingSenderId: '845151277427',
-  },
+    apiKey: "AIzaSyDfAdz9nTaGUgbNj9QBOzzNFuZR78H5YLQ",
+  authDomain: "web-team-ptk-12.firebaseapp.com",
+  databaseURL: "https://web-team-ptk-12-default-rtdb.firebaseio.com",
+  projectId: "web-team-ptk-12",
+  storageBucket: "web-team-ptk-12.appspot.com",
+  messagingSenderId: "540058480592",
+  appId: "1:540058480592:web:938aaf1a8661f3a5a9d3d5",
+  measurementId: "G-EWCLCSN5KY"
+},
 };

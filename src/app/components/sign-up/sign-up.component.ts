@@ -14,4 +14,7 @@ export class SignUpComponent {
   signUp(email: string, password: string) {
     this.authService.signUpWithEmailAndPassword(email, password);
   }
+  logInWithGoogle() {
+    this.authService.logInWithGoogleProvider();
+  }
 }
