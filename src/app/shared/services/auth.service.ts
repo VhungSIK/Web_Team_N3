@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { GoogleAuthProvider } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -12,6 +13,7 @@ export class AuthService {
 
   constructor(
     private firebaseAuthenticationService: AngularFireAuth,
+    private firebaseDatabase: AngularFireDatabase,
     private router: Router,
     private ngZone: NgZone
   ) {
@@ -53,19 +55,38 @@ export class AuthService {
     return this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         this.userData = userCredential.user
-        this.observeUserState()
+        this.observeUserState();
+        this.saveUserDataInDatabase(userCredential.user);
       })
       .catch((error) => {
         alert(error.message);
       })
   }
-
+  saveUserDataInDatabase(user: any) {
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      userType: 'user',
+    };
+    this.firebaseDatabase.object(`users/${user.uid}`).update(userData);
+  }
   observeUserState() {
     this.firebaseAuthenticationService.authState.subscribe((userState) => {
-      userState && this.ngZone.run(() => this.router.navigate(['dashboard']))
-    })
+      if (userState) {
+        const userRef = this.firebaseDatabase.object(`users/${userState.uid}`);
+        userRef.valueChanges().subscribe((userData: any) => {
+          if (userData && userData.userType) {
+            if (userData.userType === 'user') {
+              this.ngZone.run(() => this.router.navigate(['dashboard']));
+            } else if (userData.userType === 'admin') {
+              this.ngZone.run(() => this.router.navigate(['admin']));
+            }
+          }
+        });
+      }
+    });
   }
-
+  
   // return true when user is logged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
