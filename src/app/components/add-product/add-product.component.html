@@ -1,0 +1,17 @@
+<p>add-product works!</p>
+<form (ngSubmit)="saveProduct()">
+      <input type="text" placeholder="Tên sản phẩm" [(ngModel)]="productName" name="productName" required>
+    <input type="number" placeholder="Giá" [(ngModel)]="productPrice" name="productPrice" required>
+    <textarea placeholder="Chi tiết" [(ngModel)]="productDetails" name="productDetails" required></textarea>
+    <input type="text" placeholder="Xuất sứ" [(ngModel)]="productOrigin" name="productOrigin" required>
+    <input type="text" placeholder="Loại" [(ngModel)]="productCategory" name="productCategory" required>
+    <input type="text" placeholder="Link ảnh" [(ngModel)]="productImage" name="productImage" required>
+    <button type="submit">Lưu</button>
+  </form>
+ <!-- Trong file add-product.component.html -->
+<div *ngIf="productImage">
+    <h3>Ảnh sản phẩm</h3>
+    <img [src]="productImage" alt="Product Image" style="width: 300px; height: auto;">
+  </div>
+  
+  
