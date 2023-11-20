@@ -5,12 +5,18 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { AdminComponent } from './components/admin/admin.component';
+import { AddProductComponent } from './components/add-product/add-product.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { CartComponent } from './components/cart/cart.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'cart/:userId', component: CartComponent }, 
+  { path: 'add-products', component: AddProductComponent },
+  { path: 'product/:id', component: ProductDetailComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 

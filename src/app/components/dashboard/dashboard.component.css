@@ -67,6 +67,11 @@ body {
 [tabindex="-1"]:focus:not(:focus-visible) {
   outline: 0 !important;
 }
+.product-img img {
+  max-width: 300px;
+  max-height: 500px;
+}
+
 
 hr {
   box-sizing: content-box;
