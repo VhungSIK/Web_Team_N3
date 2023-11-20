@@ -37,10 +37,17 @@ export class CartComponent implements OnInit {
     // Tính giá tổng từ danh sách sản phẩm trong giỏ hàng
     this.cartItems.forEach(item => {
       const productPrice = item.price * item.quantity;
-      this.totalPrice += productPrice;
+      this.totalPrice += productPrice; 
     });
+    this.cartItems.forEach(item => {
+      item.totalPricePerItem = item.price * item.quantity;
+      this.totalPrice += item.totalPricePerItem;
+    });
+    
   }
-
+  updateQuantity() {
+    this.calculateTotalPrice(); // Gọi hàm tính tổng giá sau khi cập nhật số lượng
+  }
   checkout() {
     // Thực hiện quá trình thanh toán, xử lý các bước cần thiết
     // Ví dụ: chuyển đến trang thanh toán, xóa giỏ hàng sau khi thanh toán, vv.

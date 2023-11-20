@@ -54,13 +54,15 @@ export class ProductDetailComponent implements OnInit {
     if (this.userIdFromRouteParams) {
       const cartItemsRef = this.db.list(`cartItems/${this.userIdFromRouteParams}`);
   
-      cartItemsRef.snapshotChanges().subscribe((items: any[]) => {
-        const existingItem = items.find(item => item.payload.val().name === productData.name);
+      cartItemsRef.query.ref.orderByChild('name').equalTo(productData.name).once('value', snapshot => {
+        const existingItem = snapshot.val();
   
         if (existingItem) {
-          const newQuantity = existingItem.payload.val().quantity + this.quantity;
+          const itemKey = Object.keys(existingItem)[0];
+          const currentQuantity = existingItem[itemKey].quantity || 0;
+          const newQuantity = currentQuantity + productData.quantity;
   
-          cartItemsRef.update(existingItem.key, { quantity: newQuantity })
+          cartItemsRef.update(itemKey, { quantity: newQuantity })
             .then(() => {
               console.log('Updated product quantity successfully');
               this.router.navigate(['cart', this.userIdFromRouteParams]);
@@ -81,6 +83,6 @@ export class ProductDetailComponent implements OnInit {
       });
     } else {
       console.error('UserId not found in route params');
-    }  
-  }
+    }
+  }  
 }  
