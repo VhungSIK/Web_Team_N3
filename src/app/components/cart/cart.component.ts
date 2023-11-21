@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -11,7 +11,7 @@ export class CartComponent implements OnInit {
   cartItems: any[] = [];
   userId: string = ''; // Biến lưu trữ userId được truyền từ ProductDetailComponent
   totalPrice: number = 0;
-  constructor(private route: ActivatedRoute, private db: AngularFireDatabase) {}
+  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router) {}
 
   ngOnInit() {
     // Lấy userId từ route params khi trang được khởi tạo
@@ -25,8 +25,9 @@ export class CartComponent implements OnInit {
 
   fetchCartItems() {
     // Lấy thông tin các sản phẩm trong giỏ hàng từ Firebase theo userId
-    this.db.list(`cartItems/${this.userId}`).valueChanges().subscribe((items: any) => {
+    this.db.list(`cartItems/${this.userId}`).valueChanges().subscribe((items: any[]) => {
       this.cartItems = items;
+      this.cartItems = items.filter(item => item.status === 'wait');
       this.calculateTotalPrice();
     });
   }
@@ -49,7 +50,14 @@ export class CartComponent implements OnInit {
     this.calculateTotalPrice(); // Gọi hàm tính tổng giá sau khi cập nhật số lượng
   }
   checkout() {
-    // Thực hiện quá trình thanh toán, xử lý các bước cần thiết
-    // Ví dụ: chuyển đến trang thanh toán, xóa giỏ hàng sau khi thanh toán, vv.
+    if (this.userId) {
+      // Truyền totalPrice và totalPricePerItem qua queryParams
+      this.router.navigate(['/checkout', this.userId], {
+        queryParams: {
+          totalPrice: this.totalPrice,
+          totalPricePerItem: this.cartItems.map(item => item.totalPricePerItem)
+        }
+      });
+    }
   }
 }

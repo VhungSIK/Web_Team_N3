@@ -47,7 +47,8 @@ export class ProductDetailComponent implements OnInit {
       name: this.product.name,
       image: this.product.image,
       quantity: this.quantity,
-      price: this.product.price
+      price: this.product.price,
+      status: 'wait'
       // Add other product details if needed
     };
   
@@ -59,18 +60,33 @@ export class ProductDetailComponent implements OnInit {
   
         if (existingItem) {
           const itemKey = Object.keys(existingItem)[0];
-          const currentQuantity = existingItem[itemKey].quantity || 0;
-          const newQuantity = currentQuantity + productData.quantity;
+          const existingStatus = existingItem[itemKey].status;
   
-          cartItemsRef.update(itemKey, { quantity: newQuantity })
-            .then(() => {
-              console.log('Updated product quantity successfully');
-              this.router.navigate(['cart', this.userIdFromRouteParams]);
-            })
-            .catch((error) => {
-              console.error('Error updating product quantity:', error);
-            });
+          if (existingStatus === 'wait') {
+            const currentQuantity = existingItem[itemKey].quantity || 0;
+            const newQuantity = currentQuantity + productData.quantity;
+  
+            cartItemsRef.update(itemKey, { quantity: newQuantity })
+              .then(() => {
+                console.log('Updated product quantity successfully');
+                this.router.navigate(['cart', this.userIdFromRouteParams]);
+              })
+              .catch((error) => {
+                console.error('Error updating product quantity:', error);
+              });
+          } else {
+            // Nếu sản phẩm có trạng thái khác wait, tạo mới sản phẩm có trạng thái wait
+            cartItemsRef.push(productData)
+              .then(() => {
+                console.log('Added product to cart successfully');
+                this.router.navigate(['cart', this.userIdFromRouteParams]);
+              })
+              .catch((error) => {
+                console.error('Error adding product to cart:', error);
+              });
+          }
         } else {
+          // Nếu sản phẩm không tồn tại trong giỏ hàng, tạo mới sản phẩm có trạng thái wait
           cartItemsRef.push(productData)
             .then(() => {
               console.log('Added product to cart successfully');
@@ -84,5 +100,5 @@ export class ProductDetailComponent implements OnInit {
     } else {
       console.error('UserId not found in route params');
     }
-  }  
-}  
+  }
+}
