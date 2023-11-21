@@ -8,6 +8,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'cart/:userId', component: CartComponent }, 
   { path: 'add-products', component: AddProductComponent },
   { path: 'product/:id', component: ProductDetailComponent },
+  { path: 'checkout/:userId', component: CheckoutComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 

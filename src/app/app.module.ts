@@ -16,6 +16,8 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,8 @@ import { CartComponent } from './components/cart/cart.component';
     AddProductComponent,
     DashboardComponent,
     ProductDetailComponent,
-    CartComponent
+    CartComponent,
+    CheckoutComponent,
   
   ],
   imports: [
@@ -37,7 +40,8 @@ import { CartComponent } from './components/cart/cart.component';
     provideAuth(() => getAuth()),
 
     // error solution NullInjectError
-    AngularFireModule.initializeApp(environment.firebase)
+    AngularFireModule.initializeApp(environment.firebase),
+      BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
