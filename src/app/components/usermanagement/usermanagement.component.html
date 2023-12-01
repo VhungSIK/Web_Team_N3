@@ -1,0 +1,31 @@
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Danh sách người dùng</h6>
+        </div>
+        <div class="table-responsive" >
+            <table class="table text-start align-middle table-bordered table-hover mb-0" >
+                <thead>
+                    <tr class="text-white">
+                        <th scope="col">Email</th>
+                        <th scope="col">Tên người dùng</th>
+                        <th scope="col">Loại người dùng</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col">Nâng quyền</th>
+                        <th scope="col">Xác nhận</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of allUsers">
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.userName }}</td>
+                        <td>{{ user.userType }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td><input class="form-check-input" type="checkbox" (change)="toggleSelection(user)"></td>
+                        <td><a class="btn btn-sm btn-primary" (click)="confirmSelection(user)">Xác nhận</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

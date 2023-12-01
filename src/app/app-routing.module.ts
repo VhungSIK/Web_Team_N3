@@ -9,6 +9,10 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { UsermanagementComponent } from './components/usermanagement/usermanagement.component';
+import { OrdersmanagementComponent } from './components/ordersmanagement/ordersmanagement.component';
+import { ListproductsComponent } from './components/listproducts/listproducts.component';
+import { EditproductComponent } from './components/editproduct/editproduct.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +23,10 @@ const routes: Routes = [
   { path: 'add-products', component: AddProductComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'checkout/:userId', component: CheckoutComponent },
+  { path: 'ordersmanagement', component: OrdersmanagementComponent }, // Đường dẫn và component cho Order Management
+  { path: 'usermanagement', component: UsermanagementComponent },
+  { path: 'listproducts', component: ListproductsComponent },
+  { path: 'editproduct/:id', component: EditproductComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 

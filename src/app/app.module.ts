@@ -18,6 +18,10 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UsermanagementComponent } from './components/usermanagement/usermanagement.component';
+import { OrdersmanagementComponent } from './components/ordersmanagement/ordersmanagement.component';
+import { ListproductsComponent } from './components/listproducts/listproducts.component';
+import { EditproductComponent } from './components/editproduct/editproduct.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +33,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ProductDetailComponent,
     CartComponent,
     CheckoutComponent,
+    UsermanagementComponent,
+    OrdersmanagementComponent,
+    ListproductsComponent,
+    EditproductComponent,
   
   ],
   imports: [

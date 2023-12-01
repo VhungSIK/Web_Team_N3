@@ -39,7 +39,7 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">Jhon Doe</h6>
+                        <h6 class="mb-0">Admin</h6>
                         <span>Admin</span>
                     </div>
                 </div>
@@ -62,7 +62,14 @@
                       
                       
                     <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Forms</a>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
+                    <div (click)="showAllOrders()" style="cursor: pointer; padding: 8px 31px; display: inline-block;">
+                        <i class="fa fa-th me-2"></i>
+                      <div style="cursor: pointer; padding: 0px 12px; display: inline-block;">Order</div>
+                      </div>
+                      <div (click)="navigateToListProducts()" style="cursor: pointer; padding: 8px 31px; display: inline-block;">
+                        <i class="fa fa-th me-2"></i>
+                      <div style="cursor: pointer; padding: 0px 12px; display: inline-block;">List Products</div>
+                      </div>
                     <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -77,7 +84,6 @@
             </nav>
         </div>
         <!-- Sidebar End -->
-
 
         <!-- Content Start -->
         <div class="content">
@@ -159,7 +165,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <img class="rounded-circle me-lg-2" src="/src/img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex">John Doe</span>
+                            <span class="d-none d-lg-inline-flex">Admin</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
@@ -170,81 +176,90 @@
                 </div>
             </nav>
             <!-- Navbar End -->
-            <div class="container-fluid pt-4 px-4">
+           
+       <!-- Các phần tử trước đó -->
+       <!-- <div *ngFor="let order of orders">
+        <p>Order ID: {{ order.key }}</p>
+    <p>Name: {{ order.firstName }} {{ order.lastName }}</p>
+    <p>Email: {{ order.email }}</p>
+    <p>Mobile No: {{ order.mobieNo }}</p>
+    <p>Address 1: {{ order.addresss }}</p>
+    <p>Address 2: {{ order.adress2 }}</p>
+    <p>City: {{ order.city }}</p>
+    <p>Country: {{ order.country }}</p>
+    <p>State: {{ order.state }}</p>
+    <p>ZIP Code: {{ order.zipcode }}</p>
+    <p>Total Price: {{ order.totalPrice }}</p>
+    <p>Timestamp: {{ order.timestamp }}</p> -->
+    <!-- Hiển thị thông tin khác cần thiết -->
+  <!-- </div> -->
+  
+       <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Recent Salse</h6>
-                        <a href="">Show All</a>
+                        <h6 class="mb-0">Danh sách người dùng</h6>
+                        <a (click)="showAllUsers()">Show All</a>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                    <div class="table-responsive" >
+                        <table class="table text-start align-middle table-bordered table-hover mb-0" >
                             <thead>
                                 <tr class="text-white">
-                                    <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Invoice</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Tên người dùng</th>
+                                    <th scope="col">Loại người dùng</th>
+                                    <th scope="col">Số điện thoại</th>
+                                    <th scope="col">Nâng quyền</th>
+                                    <th scope="col">Xác nhận</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                                </tr>
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox"></td>
-                                    <td>01 Jan 2045</td>
-                                    <td>INV-0123</td>
-                                    <td>Jhon Doe</td>
-                                    <td>$123</td>
-                                    <td>Paid</td>
-                                    <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                                <tr *ngFor="let user of users">
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.userName }}</td>
+                                    <td>{{ user.userType }}</td>
+                                    <td>{{ user.phone }}</td>
+                                    <td><input class="form-check-input" type="checkbox" (change)="toggleSelection(user)"></td>
+                                    <td><a class="btn btn-sm btn-primary" (click)="confirmSelection(user)">Xác nhận</a></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-           
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Danh sách đơn hàng</h6>
+                        <a (click)="showAllOrders()">Show All</a>
+                    </div>
+                    <div class="table-responsive" >
+                        <table class="table text-start align-middle table-bordered table-hover mb-0" >
+                            <thead>
+                                <tr class="text-white">
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Tên người dùng</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Tổng tiền</th>
+                                    <th scope="col">Thời gian</th>
 
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let userId of getOrderUserIds()">
+                                <tr *ngFor="let orderId of getOrderIds(userId)">
+                                    <td>{{ orders[userId][orderId]?.email }}</td>
+                                    <td>{{ orders[userId][orderId]?.fullName}}</td>
+                                    <td>{{ getTotalQuantity(userId, orderId) }}</td>
+                                    <td>{{ orders[userId][orderId]?.totalPrice }}</td>
+                                    <td>{{ orders[userId][orderId]?.date }}</td>
 
-            <!-- Footer Start -->
-           
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        
+              
         </div>
         <!-- Content End -->
 

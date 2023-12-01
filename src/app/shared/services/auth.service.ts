@@ -51,21 +51,23 @@ export class AuthService {
   }
 
   // sign-up with email and password
-  signUpWithEmailAndPassword(email: string, password: string) {
+  signUpWithEmailAndPassword(email: string, password: string, userName: string,  phone: string) {
     return this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         this.userData = userCredential.user
         this.observeUserState();
-        this.saveUserDataInDatabase(userCredential.user);
+        this.saveUserDataInDatabase(userCredential.user, userName, phone);
       })
       .catch((error) => {
         alert(error.message);
       })
   }
-  saveUserDataInDatabase(user: any) {
+  saveUserDataInDatabase(user: any, userName: string, phone: string) {
     const userData = {
       uid: user.uid,
       email: user.email,
+      userName:userName,
+      phone:phone,
       userType: 'user',
     };
     this.firebaseDatabase.object(`users/${user.uid}`).update(userData);
@@ -86,13 +88,20 @@ export class AuthService {
       }
     });
   }
-  
   // return true when user is logged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null;
   }
-
+  getUsers() {
+    return this.firebaseDatabase.list('users').valueChanges();
+  }
+  updateUserType(userId: string, newType: string) {
+    return this.firebaseDatabase.object(`users/${userId}/userType`).set(newType);
+  }
+  getOrders() {
+    return this.firebaseDatabase.list('orders').valueChanges();
+  }
   // logOut
   logOut() {
     return this.firebaseAuthenticationService.signOut().then(() => {

@@ -11,6 +11,7 @@ export class AddProductComponent {
   productId: string = '';
   productName: string = '';
   productPrice: number = 0;
+  productQuantity: number = 0;
   productDetails: string = '';
   productOrigin: string = '';
   productCategory: string = '';
@@ -23,6 +24,7 @@ export class AddProductComponent {
       id: this.productId,
       name: this.productName,
       price: this.productPrice,
+      quantity: this.productQuantity,
       details: this.productDetails,
       origin: this.productOrigin,
       category: this.productCategory,
@@ -48,6 +50,7 @@ export class AddProductComponent {
     // Reset các trường thông tin sản phẩm về giá trị mặc định
     this.productName = '';
     this.productPrice = 0;
+    this.productQuantity = 0;
     this.productDetails = '';
     this.productOrigin = '';
     this.productCategory = '';
