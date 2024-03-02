@@ -38,10 +38,10 @@
                     <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your email password</span>
-                <input type="userName" name="userName" id="userName" #userName placeholder="Họ tên" required>
+                <input type="userName" name="userName" id="userName" #userName placeholder="Full name" required>
                 <input type="email" name="email" id="email" #email placeholder="example@email.com" required>
                 <input input type="password" name="password" id="password" placeholder="••••••••" #password required>
-                <input type="phone" name="phone" id="phone" #phone placeholder="Số điện thoại" required>
+                <input type="phone" name="phone" id="phone" #phone placeholder="Phone" required>
                 <a href="#">Forget Your Password?</a>
                 <button type="click" (click)="signUp(email.value, password.value, userName.value, phone.value)">Sign Up</button>
             </form>

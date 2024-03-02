@@ -12,9 +12,18 @@ export class SignUpComponent {
   }
 
   signUp(email: string, password: string, userName: string, phone: string) {
-    this.authService.signUpWithEmailAndPassword(email, password, userName, phone);
+    if (this.authService.validateName(userName) && this.authService.validatePhoneNumber(phone)) {
+      this.authService.signUpWithEmailAndPassword(email, password, userName, phone);
+    } else {
+      if (!this.authService.validateName(userName)) {
+        alert("Please enter a valid name (at least 2 words containing only letters).");
+      }
+      if (!this.authService.validatePhoneNumber(phone)) {
+        alert("Please enter a valid phone number (from 9 to 10 digits).");
+      }
+    }
   }
   logInWithGoogle() {
     this.authService.logInWithGoogleProvider();
-  }
+  } 
 }

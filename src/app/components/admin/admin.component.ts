@@ -27,6 +27,9 @@ export class AdminComponent implements OnInit {
  navigateToListProducts() {
   this.router.navigate(['/listproducts']); // Điều hướng đến ListproductsComponent
 }
+navigateToAddCouponCode() {
+  this.router.navigate(['/addcouponcode']); // Điều hướng đến ListproductsComponent
+}
 
  getTotalQuantity(userId: string, orderId: string): number {
   const order = this.orders[userId][orderId];

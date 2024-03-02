@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProductService } from 'src/app/product.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,76 +33,102 @@ export class ProductDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.productId = params['id'];
-      this.userIdFromRouteParams = params['userId']; // Lấy userId từ route params
-      // Lấy thông tin sản phẩm từ Firebase theo productId
+      this.userIdFromRouteParams = params['userId'];
       this.db.object(`products/${this.productId}`).valueChanges().subscribe((product: any) => {
         this.product = product;
       });
     });
   }
+
   addToCart() {
+    if (this.product.quantity <= 0) {
+      alert('Sản phẩm đã hết hàng');
+      return;
+    }
+
+    if (this.quantity > this.product.quantity) {
+      alert('Không đủ số lượng sản phẩm');
+      return;
+    }
+
     const productData = {
+      id: this.productId,
       name: this.product.name,
       image: this.product.image,
       quantity: this.quantity,
       price: this.product.price,
       status: 'wait'
-      // Add other product details if needed
     };
-  
+
+    const remainingQuantity = this.product.quantity - this.quantity;
+
     if (this.userIdFromRouteParams) {
       const cartItemsRef = this.db.list(`cartItems/${this.userIdFromRouteParams}`);
-  
+
       cartItemsRef.query.ref.orderByChild('name').equalTo(productData.name).once('value', snapshot => {
         const existingItem = snapshot.val();
-  
+
         if (existingItem) {
-          // Loop through existing items to check for status
           const existingKeys = Object.keys(existingItem);
           let foundWaitItem = false;
+
           existingKeys.forEach(itemKey => {
             const existingStatus = existingItem[itemKey].status;
+
             if (existingStatus === 'wait') {
               foundWaitItem = true;
               const currentQuantity = existingItem[itemKey].quantity || 0;
               const newQuantity = currentQuantity + productData.quantity;
-  
+
               cartItemsRef.update(itemKey, { quantity: newQuantity })
                 .then(() => {
-                  console.log('Updated product quantity successfully');
-                  this.router.navigate(['cart', this.userIdFromRouteParams]);
+                  console.log('Updated product quantity in cart successfully');
+                  this.updateRemainingQuantity(remainingQuantity);
                 })
                 .catch((error) => {
-                  console.error('Error updating product quantity:', error);
+                  console.error('Error updating product quantity in cart:', error);
                 });
             }
           });
-  
+
           if (!foundWaitItem) {
-            // If no 'wait' status found for the product name, add a new product
             cartItemsRef.push(productData)
               .then(() => {
                 console.log('Added product to cart successfully');
-                this.router.navigate(['cart', this.userIdFromRouteParams]);
+                this.updateRemainingQuantity(remainingQuantity);
               })
               .catch((error) => {
                 console.error('Error adding product to cart:', error);
               });
           }
         } else {
-          // If product doesn't exist in the cart, add a new product
           cartItemsRef.push(productData)
             .then(() => {
               console.log('Added product to cart successfully');
-              this.router.navigate(['cart', this.userIdFromRouteParams]);
+              this.updateRemainingQuantity(remainingQuantity);
             })
             .catch((error) => {
               console.error('Error adding product to cart:', error);
             });
         }
       });
-    } else {  
+    } else {
       console.error('UserId not found in route params');
     }
-  }  
+    
+  }
+
+  updateRemainingQuantity(remainingQuantity: number) {
+    this.db.object(`products/${this.productId}`).update({ quantity: remainingQuantity })
+      .then(() => {
+        console.log('Updated product quantity on Firebase successfully');
+        this.db.object(`products/${this.productId}`).valueChanges().subscribe((product: any) => {
+          this.product = product;
+        });
+        this.router.navigate(['cart', this.userIdFromRouteParams]);
+      })
+      .catch((error) => {
+        console.error('Error updating product quantity on Firebase:', error);
+      });
+  }
 }

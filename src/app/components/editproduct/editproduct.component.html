@@ -6,40 +6,40 @@
     <div class="bg-light p-30 mb-5">
         <div class="row">
             <div class="col-md-6 form-group">
-                <label>Tên sản phẩm</label>
+                <label>Product Name</label>
                 <input class="form-control"  type="text" placeholder="Iphone15 Promax" [(ngModel)]="productName" name="productName" required>
             </div>
             <div class="col-md-6 form-group">
-                <label>Xuất sứ</label>
+                <label>Origin</label>
                 <input class="form-control" type="text" placeholder="Viet Nam" [(ngModel)]="productOrigin" name="productOrigin" required>
             </div>
             <div class="col-md-6 form-group">
-                <label>Loại</label>
+                <label>Category</label>
                 <input class="form-control" type="text" placeholder="Like new" [(ngModel)]="productCategory" name="productCategory" required>
             </div>
             <div class="col-md-6 form-group">
-                <label>Thêm link ảnh của sản phẩm</label>
+                <label>Product Image</label>
                 <input class="form-control" type="text" placeholder="Link ảnh" [(ngModel)]="productImage" name="productImage" required>
             </div>
             <div class="col-md-6 form-group">
-              <label>Số lượng</label>
+              <label>Quantity</label>
               <input class="form-control" type="number" placeholder="Giá" [(ngModel)]="productQuantity" name="productPrice" required>
           </div>
             <div class="col-md-6 form-group">
-                <label>Mức Giá</label>
+                <label>Price</label>
                 <input class="form-control" type="number" placeholder="Giá" [(ngModel)]="productPrice" name="productPrice" required>
             </div>
           
             <div class="col-md-6 form-group">
-              <label>Chi tiết sản phẩm </label>
+              <label>Detail</label>
              <textarea class="form-control" placeholder="Chi tiết" [(ngModel)]="productDetails" name="productDetails" required></textarea>
           </div>
           <div class="col-md-6 form-group" *ngIf="productImage">
-            <label>Ảnh sản phẩm</label>
+            <label>Image</label>
             <img [src]="productImage" alt="Product Image" style="width: 300px; height: auto;">
         </div>
                
-        <button class="btn btn-block btn-primary font-weight-bold py-3" type="submit">Lưu sản phẩm</button>
+        <button class="btn btn-block btn-primary font-weight-bold py-3" type="submit">Save Update</button>
         </div>
     </div>
   </form>

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 
 
@@ -15,26 +15,67 @@ export class CheckoutComponent implements OnInit {
   userEmail: string = '';
   userPhone: string = '';
   totalPrice: number = 0;
+  discountPrice: number = 0;
   totalPricePerItem: number[] = [];
+  total: number = 0;
+  totalOrder: number = 0; // Khởi tạo thuộc tính để lưu tổng đơn hàng
   cartItems: any[] = [];
   paymentMethodSelected: boolean = false;
+  
 
-  constructor(private route: ActivatedRoute, private db: AngularFireDatabase) {}
+  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router, private zone: NgZone) {}
   placeOrder() {
     const directCheckElement = document.getElementById('directcheck') as HTMLInputElement;  
     const fullNameInput = document.querySelector('input[placeholder="John"]') as HTMLInputElement;
-
+    const totalOrder = this.calculateTotal();
     const AddressLine1Input = document.querySelector('input[placeholder="123 Street"]') as HTMLInputElement;
     const AddressLine2Input = document.querySelector('input[placeholder="1234 Street"]') as HTMLInputElement;
     const CountryInput = document.querySelector('.custom-select') as HTMLSelectElement;
     const StateInput = document.querySelector('input[placeholder="New York1"]') as HTMLInputElement;
     const ZIPCodeInput = document.querySelector('input[placeholder="123"]') as HTMLInputElement;
+    const fullNameValue = fullNameInput.value.trim();
+    const address1Value = AddressLine1Input.value.trim();
+    const address2Value = AddressLine2Input.value.trim();
+    const zipCodeValue = ZIPCodeInput.value.trim();
+    const stateValue = StateInput.value.trim();
   
-    if (!directCheckElement || !fullNameInput ) {
-      console.log('Không thể tìm thấy phần tử trên giao diện người dùng.');
+    const zipCodeRegex = /^\d{9,10}$/;
+    const stateRegex = /^[a-zA-Z\s]{2,}$/;
+  
+    if (!directCheckElement || !fullNameValue) {
+      alert('Please enter your full name.');
       return;
     }
   
+    if (!address1Value || !address2Value) {
+      alert('Please enter Address Line 1 and Address Line 2.');
+      return;
+    }
+  
+    const stateEntered = !!stateValue.trim();
+    const zipEntered = !!zipCodeValue.trim();
+  
+    if ((stateEntered && !zipEntered) || (!stateEntered && zipEntered)) {
+      alert('Please enter both Full Name and Mobile No or leave both fields empty.');
+      return;
+    }
+  
+    if (stateValue && !stateRegex.test(stateValue)) {
+      alert('Please enter Full Name with letters only and at least 2 words.');
+      return;
+    }
+  
+    if (zipCodeValue && !zipCodeRegex.test(zipCodeValue)) {
+      alert('Please enter a Mobile No Code with 9 to 10 digits.');
+      return;
+    }
+  
+    if (!directCheckElement) {
+      alert('Please select a payment method.');
+      return;
+    } else {
+      this.paymentMethodSelected = true;
+    }
     const directCheck = directCheckElement.checked;
     const fullName = this.userName; // Sử dụng dữ liệu userName đã có
     const email = this.userEmail; // Sử dụng dữ liệu userEmail đã có
@@ -52,6 +93,7 @@ export class CheckoutComponent implements OnInit {
     const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`; // Định dạng ngày tháng
 
     const database = this.db.database;
+    
   
     if (!directCheck) {
       window.alert('Vui lòng chọn phương thức thanh toán.');
@@ -71,8 +113,10 @@ export class CheckoutComponent implements OnInit {
       zipcode: zipcode,
       totalPrice: this.totalPrice,
       date: formattedDate,
-      orderItems: this.cartItems
+      orderItems: this.cartItems,
+      totalOrder: totalOrder
     });
+    
     newOrderRef.then((snapshot) => {
       const orderId = snapshot.key;
       console.log('New Order ID:', orderId);
@@ -82,30 +126,74 @@ export class CheckoutComponent implements OnInit {
       snapshot.forEach(childSnapshot => {
         const key: string | null = childSnapshot.key;
         const item = childSnapshot.val();
+        const totalOrder = this.calculateTotal();
+        const userRef = database.ref(`users/${userId}`);
+        userRef.once('value', (snapshot) => {
+          const userData = snapshot.val();
+          let currentRank = userData.rank || 0;
+          currentRank = parseInt(currentRank);
+          
+          const newRank = currentRank + totalOrder; // Add totalOrder to current rank
+          userRef.update({ rank: newRank }); // Update the new rank in Firebase
+        
+          console.log('Updated Rank:', newRank);
+        });
       
         if (key !== null && item.status === 'wait') {
           console.log(`Found item with key: ${key} and status: ${item.status}`);
           database.ref(`cartItems/${userId}/${key}`).update({ status: 'complete' })
             .then(() => {
               console.log('Updated product status successfully');
+// Sau khi xử lý đặt hàng thành công
             })
             .catch(error => {
               console.error('Error updating product status:', error);
+
             });
+
         }
+        this.zone.run(() => {
+          this.router.navigate(['/orderstatus']); // Chuyển hướng đến trang thông báo đơn hàng
+      });      
       });
-      
     }).catch((error) => {
       console.error('Error saving order:', error);
     });
   }    
+  // fetchUserRank(userId: string) {
+  //   this.db.object(`users/${userId}/rank`).valueChanges().subscribe((userRank: any) => {
+  //     console.log('User Rank:', userRank); // Kiểm tra giá trị rank của người dùng
+  //     if (userRank) {
+  //       this.applyShippingDiscount(userRank); // Áp dụng chiết khấu phí vận chuyển dựa trên rank
+  //     }
+  //   });
+  // }
+  // applyShippingDiscount(userRank: number) {
+  //   const totalPrice = this.totalPrice; // Tổng giá trị đơn hàng
+  //   let shippingFee = this.calculateShippingFee(totalPrice); // Phí vận chuyển ban đầu
+  
+  //   if (userRank < 20000) {
+  //     // Nếu rank dưới 20000, không thay đổi phí vận chuyển
+  //     // Phí vận chuyển vẫn giữ nguyên
+  //   } else if (userRank >= 20000 && userRank <= 50000) {
+  //     // Nếu rank từ 20000 đến 50000, giảm 25% phí vận chuyển
+  //     shippingFee *= 0.75;
+  //   } else {
+  //     // Nếu rank trên 50000, không tính phí vận chuyển
+  //     shippingFee *= 0;
+  //   }
+  
+  //   // Tính tổng giá trị đơn hàng sau khi áp dụng chiết khấu
+  //   this.totalOrder = totalPrice + shippingFee - this.discountPrice;
+  // }
+  
   
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.userId = params['userId'];
       this.userName = params['userName'];
       this.userEmail = params['userEmail'];
-      console.log('User Name:', this.userName); // Thêm dòng này để kiểm tra giá trị của userName
+      // this.fetchUserRank(this.userId);
 
       if (this.userId) {
         this.fetchCartItems();
@@ -115,9 +203,27 @@ export class CheckoutComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.totalPrice = params['totalPrice'];
       this.totalPricePerItem = params['totalPricePerItem'];
+      this.discountPrice = params['discountPrice'] || 0;
+      console.log('Discount Price:', this.discountPrice); 
+      this.total = this.calculateTotal();
+      const couponName = params['appliedCoupon'];
+      if (couponName) {
+        console.log('Applied coupon:', couponName);
+      }
+  
+      console.log('Checkout Page Data:', {
+        userId: this.userId,
+        userName: this.userName,
+        userEmail: this.userEmail,
+        totalPrice: this.totalPrice,
+        totalPricePerItem: this.totalPricePerItem,
+        discountPrice: this.discountPrice,
+        total: this.total,
+        couponName: couponName
+      });
     });
   }
-
+  
   calculateShippingFee(totalPrice: number): number {
     const shippingFeePerTen = 0.5;
     const shippingFee = Math.floor(totalPrice / 10) * shippingFeePerTen;
@@ -145,10 +251,8 @@ export class CheckoutComponent implements OnInit {
   
         return item;
       });
-  
       this.totalPrice = this.cartItems.reduce((acc, item) => acc + item.totalPricePerItem, 0);
       const shippingFee = this.calculateShippingFee(this.totalPrice);
-  
       // Tính tổng số lượng sản phẩm và phí vận chuyển
       const quantityAll = totalQuantity; // Tổng số lượng sản phẩm tính cả phí vận chuyển
   
@@ -168,4 +272,10 @@ export class CheckoutComponent implements OnInit {
         });
     });
   }  
+  calculateTotal() {
+    const shippingFee = this.calculateShippingFee(this.totalPrice);
+    const total = this.totalPrice + shippingFee - this.discountPrice;
+    return total;
+  }
+  
 }  

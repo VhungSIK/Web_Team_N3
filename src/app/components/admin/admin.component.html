@@ -70,7 +70,10 @@
                         <i class="fa fa-th me-2"></i>
                       <div style="cursor: pointer; padding: 0px 12px; display: inline-block;">List Products</div>
                       </div>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
+                      <div (click)="navigateToAddCouponCode()" style="cursor: pointer; padding: 8px 31px; display: inline-block;">
+                        <i class="fa fa-th me-2"></i>
+                      <div style="cursor: pointer; padding: 0px 12px; display: inline-block;">Coupon Code</div>
+                      </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -197,7 +200,7 @@
        <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Danh sách người dùng</h6>
+                        <h6 class="mb-0">User List</h6>
                         <a (click)="showAllUsers()">Show All</a>
                     </div>
                     <div class="table-responsive" >
@@ -205,11 +208,11 @@
                             <thead>
                                 <tr class="text-white">
                                     <th scope="col">Email</th>
-                                    <th scope="col">Tên người dùng</th>
-                                    <th scope="col">Loại người dùng</th>
-                                    <th scope="col">Số điện thoại</th>
-                                    <th scope="col">Nâng quyền</th>
-                                    <th scope="col">Xác nhận</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">User Type</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Empowerment</th>
+                                    <th scope="col">Confirm</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -219,7 +222,7 @@
                                     <td>{{ user.userType }}</td>
                                     <td>{{ user.phone }}</td>
                                     <td><input class="form-check-input" type="checkbox" (change)="toggleSelection(user)"></td>
-                                    <td><a class="btn btn-sm btn-primary" (click)="confirmSelection(user)">Xác nhận</a></td>
+                                    <td><a class="btn btn-sm btn-primary" (click)="confirmSelection(user)">Confirm</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -229,7 +232,7 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-secondary text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Danh sách đơn hàng</h6>
+                        <h6 class="mb-0">List of Orders</h6>
                         <a (click)="showAllOrders()">Show All</a>
                     </div>
                     <div class="table-responsive" >
@@ -237,10 +240,10 @@
                             <thead>
                                 <tr class="text-white">
                                     <th scope="col">Email</th>
-                                    <th scope="col">Tên người dùng</th>
-                                    <th scope="col">Số lượng</th>
-                                    <th scope="col">Tổng tiền</th>
-                                    <th scope="col">Thời gian</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Time</th>
 
                                 </tr>
                             </thead>
@@ -249,7 +252,7 @@
                                     <td>{{ orders[userId][orderId]?.email }}</td>
                                     <td>{{ orders[userId][orderId]?.fullName}}</td>
                                     <td>{{ getTotalQuantity(userId, orderId) }}</td>
-                                    <td>{{ orders[userId][orderId]?.totalPrice }}</td>
+                                    <td>{{ orders[userId][orderId]?.totalOrder }}</td>
                                     <td>{{ orders[userId][orderId]?.date }}</td>
 
                                 </tr>

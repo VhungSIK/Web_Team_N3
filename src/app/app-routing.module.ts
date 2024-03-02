@@ -13,6 +13,8 @@ import { UsermanagementComponent } from './components/usermanagement/usermanagem
 import { OrdersmanagementComponent } from './components/ordersmanagement/ordersmanagement.component';
 import { ListproductsComponent } from './components/listproducts/listproducts.component';
 import { EditproductComponent } from './components/editproduct/editproduct.component';
+import { AddcouponcodeComponent } from './components/addcouponcode/addcouponcode.component';
+import { OrderstatusComponent } from './components/orderstatus/orderstatus.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -27,6 +29,8 @@ const routes: Routes = [
   { path: 'usermanagement', component: UsermanagementComponent },
   { path: 'listproducts', component: ListproductsComponent },
   { path: 'editproduct/:id', component: EditproductComponent },
+  { path: 'orderstatus', component: OrderstatusComponent },
+  { path: 'addcouponcode', component: AddcouponcodeComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 

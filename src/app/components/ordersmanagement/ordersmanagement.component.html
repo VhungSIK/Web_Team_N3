@@ -1,7 +1,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Danh sách đơn hàng</h6>
+            <h6 class="mb-0">List of orders</h6>
 </div>
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
@@ -10,13 +10,14 @@
                 <thead>
                     <tr class="text-white">
                         <th scope="col">Email</th>
-                        <th scope="col">Tên người dùng</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Tổng tiền</th>
-                        <th scope="col">Thời gian</th>
-                        <th scope="col">Sản phẩm</th>
-                        <th scope="col">Duyệt</th>
-                        <th scope="col">Xác nhận</th>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Products</th>
+                        <th scope="col">Select</th>
+                        <th scope="col">Remove</th>
+                        <th scope="col">Confirm</th>
 
                     </tr>
                 </thead>
@@ -27,13 +28,12 @@
                         <td>{{ orders[userId][orderId]?.fullName }}</td>
                         <td>{{ getTotalQuantity(userId, orderId) }}</td>
 
-                        <td>{{ orders[userId][orderId]?.totalPrice }}</td>
+                        <td>{{ orders[userId][orderId]?.totalOrder }}</td>
                         <td>{{ orders[userId][orderId]?.date }}</td>
                         <td>
                             <ul>
                                 <li *ngFor="let item of orders[userId][orderId]?.orderItems">
                                     {{ item?.name }} <!-- Hiển thị tên sản phẩm từ mảng orderItems -->
-                                    {{ item?.status }}
                                 </li>
                             </ul>
                         </td>
@@ -41,7 +41,10 @@
                             <input class="form-check-input" type="checkbox" (change)="updateSelectedOrders(userId, orderId)">
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-primary" (click)="confirmOrder(userId, orderId)">Xác nhận</a>
+                            <a class="btn btn-sm btn-primary" (click)="removeOrder(userId, orderId)">Delete</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" (click)="confirmOrder(userId, orderId)">Confirm</a>
                         </td>
                         
                     </tr>

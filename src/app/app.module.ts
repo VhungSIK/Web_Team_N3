@@ -22,6 +22,8 @@ import { UsermanagementComponent } from './components/usermanagement/usermanagem
 import { OrdersmanagementComponent } from './components/ordersmanagement/ordersmanagement.component';
 import { ListproductsComponent } from './components/listproducts/listproducts.component';
 import { EditproductComponent } from './components/editproduct/editproduct.component';
+import { AddcouponcodeComponent } from './components/addcouponcode/addcouponcode.component';
+import { OrderstatusComponent } from './components/orderstatus/orderstatus.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +39,8 @@ import { EditproductComponent } from './components/editproduct/editproduct.compo
     OrdersmanagementComponent,
     ListproductsComponent,
     EditproductComponent,
+    AddcouponcodeComponent,
+    OrderstatusComponent,
   
   ],
   imports: [

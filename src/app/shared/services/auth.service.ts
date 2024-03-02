@@ -3,6 +3,7 @@ import { GoogleAuthProvider } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
+import { of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,6 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   userData: any;
-
   constructor(
     private firebaseAuthenticationService: AngularFireAuth,
     private firebaseDatabase: AngularFireDatabase,
@@ -26,9 +26,7 @@ export class AuthService {
         localStorage.setItem('user', 'null');
       }
     })
-
   }
-
   // log-in with email and password
   logInWithEmailAndPassword(email: string, password: string) {
     return this.firebaseAuthenticationService.signInWithEmailAndPassword(email, password)
@@ -40,7 +38,6 @@ export class AuthService {
         alert(error.message);
       })
   }
-
   // log-in with google
   logInWithGoogleProvider() {
     return this.firebaseAuthenticationService.signInWithPopup(new GoogleAuthProvider())
@@ -49,7 +46,6 @@ export class AuthService {
         alert(error.message);
       })
   }
-
   // sign-up with email and password
   signUpWithEmailAndPassword(email: string, password: string, userName: string,  phone: string) {
     return this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password)
@@ -62,6 +58,16 @@ export class AuthService {
         alert(error.message);
       })
   }
+  validateName(name: string): boolean {
+    const nameRegex = /^[a-zA-Z]{2,}(?: [a-zA-Z]+)*$/; // Biểu thức chính quy kiểm tra họ tên
+  
+    return nameRegex.test(name);
+  }
+  validatePhoneNumber(phone: string): boolean {
+    const phoneRegex = /^\d{9,10}$/; // Biểu thức chính quy kiểm tra số điện thoại từ 9 đến 10 chữ số
+
+    return phoneRegex.test(phone);
+  }
   saveUserDataInDatabase(user: any, userName: string, phone: string) {
     const userData = {
       uid: user.uid,
@@ -69,6 +75,7 @@ export class AuthService {
       userName:userName,
       phone:phone,
       userType: 'user',
+      rank:'0',
     };
     this.firebaseDatabase.object(`users/${user.uid}`).update(userData);
   }
@@ -88,11 +95,28 @@ export class AuthService {
       }
     });
   }
+  observeUserData() {
+    return this.firebaseAuthenticationService.authState.pipe(
+      switchMap(userState => {
+        if (userState) {
+          return this.firebaseDatabase.object(`users/${userState.uid}`).valueChanges();
+        } else {
+          return of(null);
+        }
+      })
+    );
+  }
+  
   // return true when user is logged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null;
   }
+  
+  getUserDataByUserId(userId: string) {
+    return this.firebaseDatabase.object(`users/${userId}`).valueChanges();
+  }
+  
   getUsers() {
     return this.firebaseDatabase.list('users').valueChanges();
   }
@@ -109,5 +133,4 @@ export class AuthService {
       this.router.navigate(['login']);
     })
   }
-
 }

@@ -102,6 +102,31 @@ isSelected(userId: string, orderId: string): boolean {
     return this.selectedOrders[userId]?.includes(orderId);
 }
 
+removeOrder(userId: string, orderId: string) {
+  if (this.isSelected(userId, orderId)) {
+    if (this.orders[userId][orderId]?.orderItems.some((item: { status: string }) => item.status === 'wait')) {
+      const confirmation = window.confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');
+      if (confirmation) {
+        this.db.object(`orders/${userId}/${orderId}`).remove()
+          .then(() => {
+            delete this.orders[userId][orderId];
+            console.log('Đơn hàng đã được xóa thành công!');
+          })
+          .catch((error: any) => {
+            console.error('Lỗi khi xóa đơn hàng:', error);
+          });
+      } else {
+        console.log('Đã hủy xóa đơn hàng!');
+      }
+    } else {
+      console.log('Đơn hàng không thể xóa vì không có mục chờ (wait)!');
+    }
+  } else {
+    console.log('Vui lòng chọn đơn hàng trước khi xóa!');
+  }
+}
+
+
 confirmOrder(userId: string, orderId: string) {
   if (this.isSelected(userId, orderId)) {
       this.orders[userId][orderId].orderItems.forEach((item: { status: string; }) => {
