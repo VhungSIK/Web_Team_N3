@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DiscountDecorator } from 'src/app/decorator/discountDecorator';
+import { PriceCalculatorDecorator } from 'src/app/decorator/priceCalculatorDecorator';
 
 @Component({
   selector: 'app-cart',
@@ -15,7 +17,7 @@ export class CartComponent implements OnInit {
   couponApplied: boolean = false;
   appliedCouponName: string = '';
   calculatedTotal: number = 0
-  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router) {}
+  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router, private discountDecorator: DiscountDecorator,    private priceCalculatorDecorator: PriceCalculatorDecorator) {}
 
   ngOnInit() {
     // Lấy userId từ route params khi trang được khởi tạo
@@ -61,9 +63,10 @@ export class CartComponent implements OnInit {
   }
   checkout() {
     if (this.userId) {
-      const totalAmount = this.totalPrice - this.discountPrice;
+      const totalPrice = this.priceCalculatorDecorator.calculateTotalPrice(this.cartItems);
+      const totalAmount = this.discountDecorator.applyDiscount(totalPrice, this.discountPrice);
       console.log('Total Amount:', totalAmount);
-      console.log('Total Price:', this.totalPrice);
+      console.log('Total Price:', totalPrice);
       console.log('Discount Price:', this.discountPrice);
       console.log('Applied Coupon:', this.appliedCouponName);
       

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/shared/services/auth.service';
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,7 @@ export class DashboardComponent implements OnInit {
   products: any[] = []; // Mảng chứa thông tin sản phẩm từ Firebase
   userData: any = {};
 
-  constructor(private db: AngularFireDatabase, private authService: AuthService) {
+  constructor(private db: AngularFireDatabase, private authService: AuthService, private router: Router) {
     this.currentUserID = this.authService.userData.uid;
   }
 
@@ -62,5 +63,8 @@ export class DashboardComponent implements OnInit {
     } else {
       return 'Kim cương';
     }
+  }
+  goToCart() {
+    this.router.navigate(['/cart', this.currentUserID]); // Chuyển hướng đến trang giỏ hàng khi click vào nút "cart"
   }
 }

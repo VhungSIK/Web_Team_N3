@@ -15,13 +15,14 @@ import { ListproductsComponent } from './components/listproducts/listproducts.co
 import { EditproductComponent } from './components/editproduct/editproduct.component';
 import { AddcouponcodeComponent } from './components/addcouponcode/addcouponcode.component';
 import { OrderstatusComponent } from './components/orderstatus/orderstatus.component';
+import { CartuserComponent } from './components/cartuser/cartuser.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'cart/:userId', component: CartComponent }, 
+  { path: 'cart/:userId', component: CartComponent, canActivate: [AuthGuard] }, 
   { path: 'add-products', component: AddProductComponent },
   { path: 'product/:id', component: ProductDetailComponent },
   { path: 'checkout/:userId', component: CheckoutComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'editproduct/:id', component: EditproductComponent },
   { path: 'orderstatus', component: OrderstatusComponent },
   { path: 'addcouponcode', component: AddcouponcodeComponent },
+  { path: 'cartuser', component: CartuserComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 
