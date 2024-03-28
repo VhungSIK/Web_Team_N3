@@ -1,6 +1,9 @@
 <a class="btn btn-sm btn-primary" href="admin" >Home Admin</a>
 <div class="container-fluid pt-5 pb-3">
     <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">All Products</span></h2>
+    <div *ngIf="showNotification" class="alert alert-success">
+        Có sản phẩm mới vừa được thêm vào giỏ hàng!
+      </div>
     <div class="row px-xl-5">
         <div class="col-lg-3 col-md-4 col-sm-6 pb-1" *ngFor="let product of products">
             <div class="product-item bg-light mb-4">
@@ -16,7 +19,7 @@
                     </div>
                 </div>
                 <div class="text-center py-4">
-                    <a class="h6 text-decoration-none text-truncate" [routerLink]="['/editproduct', product.id, { userId: currentUserID }]">{{ product.name }}</a>
+                    <a name="productName" class="h6 text-decoration-none text-truncate" [routerLink]="['/editproduct', product.id, { userId: currentUserID }]">{{ product.name }}</a>
                     <div class="d-flex align-items-center justify-content-center mt-2" >
                         <h5>${{ product.price }}</h5>
                     </div>

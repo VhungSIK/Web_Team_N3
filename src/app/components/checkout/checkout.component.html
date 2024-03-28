@@ -228,7 +228,13 @@
                             <label>Mobile No</label>
                             <input class="form-control" type="text" placeholder="123">
                         </div>
-                       
+                        <div *ngIf="showBankTransferImage" style="margin-top: 30px; margin-left: 20px; float: auto;">
+                            <img src="https://vn-bank.com/wp-content/uploads/2023/10/cach-tao-ma-qr-cho-tai-khoan-ngan-hang-techcombank-2.jpg " alt="Bank Transfer Image"  width="300"height="200">
+                          </div>
+                          <div *ngIf="showBankTransferImage" class="col-md-6 form-group" style="margin-top: 30px;">
+                            <label>Techcombank</label>
+                            <input class="form-control" type="text" placeholder="302151541515" disabled>
+                        </div>
                     </div>
                 </div>
                 <div class="collapse mb-5" id="shipping-address">
@@ -323,18 +329,23 @@
                                 <label class="custom-control-label" for="paypal">Paypal</label>
                             </div>
                         </div>
-                        <div class="form-group">
-                          <div class="custom-control custom-radio">
-                              <input type="radio" class="custom-control-input" name="payment" id="directcheck">
-                              <label class="custom-control-label" for="directcheck">Direct Check</label>
-                          </div>
-                      </div>
                         <div class="form-group mb-4">
                             <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer">
+                                <input type="radio" class="custom-control-input" name="payment" id="directcheck" (change)="updateBankTransferImageVisibility()">
+                                <label class="custom-control-label" for="directcheck">Direct Check</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" name="payment" id="banktransfer" (change)="updateBankTransferImageVisibility()">
                                 <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
                             </div>
                         </div>
+                        
+                        <!-- Thêm các phần tử input cho các phương thức thanh toán khác (nếu có) và gắn sự kiện change tương tự -->
+                        
+                    
                         <button class="btn btn-block btn-primary font-weight-bold py-3" (click)="placeOrder()">Place Order</button>
                       </div>
                 </div>

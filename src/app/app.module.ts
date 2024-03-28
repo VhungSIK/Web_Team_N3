@@ -1,3 +1,4 @@
+import { UpdateProductCommand } from './command/updateproductcommand';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -24,6 +25,15 @@ import { ListproductsComponent } from './components/listproducts/listproducts.co
 import { EditproductComponent } from './components/editproduct/editproduct.component';
 import { AddcouponcodeComponent } from './components/addcouponcode/addcouponcode.component';
 import { OrderstatusComponent } from './components/orderstatus/orderstatus.component';
+import { ProductAddedObserverService } from './product-added-observer.service';
+import { CartuserComponent } from './components/cartuser/cartuser.component'; // Import service 
+import { ImageProxyService } from './ImageProxyService';  
+import { DiscountDecorator } from './decorator/discountDecorator';
+import { PriceCalculatorDecorator } from './decorator/priceCalculatorDecorator';
+import { DeleteProductCommand } from './command/deleteproductcommand';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,6 +51,7 @@ import { OrderstatusComponent } from './components/orderstatus/orderstatus.compo
     EditproductComponent,
     AddcouponcodeComponent,
     OrderstatusComponent,
+    CartuserComponent,
   
   ],
   imports: [
@@ -50,12 +61,14 @@ import { OrderstatusComponent } from './components/orderstatus/orderstatus.compo
     AngularFireDatabaseModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
+    
 
     // error solution NullInjectError
     AngularFireModule.initializeApp(environment.firebase),
       BrowserAnimationsModule
+      
   ],
-  providers: [],
+  providers: [ProductAddedObserverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

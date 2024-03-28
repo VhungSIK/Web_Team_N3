@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Order } from 'src/app/oder';
 
 @Component({
   selector: 'app-ordersmanagement',
@@ -17,11 +18,24 @@ export class OrdersmanagementComponent {
 
   getOrders() {
     this.db.object('orders').valueChanges().subscribe((data: any) => {
-      this.orders = data || {};
-      this.filterOrdersByStatus(); // Gọi hàm để lọc các đơn hàng có status là "wait"
+      this.orders = {};
+      for (const userId of Object.keys(data || {})) {
+        const userOrders = data[userId];
+        for (const orderId of Object.keys(userOrders || {})) {
+          const orderData = userOrders[orderId];
+          const order = new Order(userId, orderId, new Date(orderData.date), orderData.email, orderData.fullName, orderData.totalOrder);
+          orderData.orderItems.forEach((item: { name: string, status: string, quantity: number }) => {
+            order.addOrderItem(item) ;
+          });
+          if (!this.orders[userId]) {
+            this.orders[userId] = {};
+          }
+          this.orders[userId][orderId] = order;
+        }
+      }
+      this.filterOrdersByStatus();
     });
   }
-  
   filterOrdersByStatus() {
     for (const userId of Object.keys(this.orders)) {
       const userOrders: { [key: string]: any } = this.orders[userId];

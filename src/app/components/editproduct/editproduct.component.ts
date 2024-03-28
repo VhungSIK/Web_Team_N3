@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UpdateProductCommand } from 'src/app/command/updateproductcommand';
 
 @Component({
   selector: 'app-editproduct',
@@ -16,7 +17,7 @@ export class EditproductComponent {
   productOrigin: string = '';
   productCategory: string = '';
   productImage: string = '';
-  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router) {}
+  constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router, private updateProductCommand: UpdateProductCommand) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -53,14 +54,14 @@ export class EditproductComponent {
       image: this.productImage
     };
 
-    this.db.object(`products/${this.productId}`).update(updatedProductData)
-      .then(() => {
-        alert('Sản phẩm đã được cập nhật thành công!');
-        this.router.navigate(['/listproducts']); // Chuyển hướng về trang danh sách sản phẩm sau khi lưu thành công
-      })
-      .catch(error => {
-        alert('Đã xảy ra lỗi khi cập nhật sản phẩm');
-        console.error('Lỗi khi cập nhật sản phẩm:', error);
-      });
-  }
+    this.updateProductCommand.execute(this.productId, updatedProductData) // Sử dụng UpdateProductCommand để cập nhật sản phẩm
+    .then(() => {
+      alert('Sản phẩm đã được cập nhật thành công!');
+      this.router.navigate(['/listproducts']); // Chuyển hướng về trang danh sách sản phẩm sau khi lưu thành công
+    })
+    .catch(error => {
+      alert('Đã xảy ra lỗi khi cập nhật sản phẩm');
+      console.error('Lỗi khi cập nhật sản phẩm:', error);
+    });
+}
 }

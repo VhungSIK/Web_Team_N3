@@ -1,0 +1,32 @@
+<div class="container-fluid pt-4 px-4">
+  <div class="bg-secondary text-center rounded p-4">
+    <div class="table-responsive">
+      <table class="table text-start align-middle table-bordered table-hover mb-0">
+        <thead>
+          <tr class="text-white">
+            <th scope="col">Email</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Time</th>
+            <th scope="col">Products</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let order of userCart">
+          <tr>
+            <td>{{ order.email }}</td>
+            <td>{{ order.fullName }}</td>
+            <td>{{ order.totalQuantity }}</td>
+            <td>{{ order.totalOrder }}</td>
+            <td>{{ order.date }}</td>
+            <td>
+              <ul>
+                <li *ngFor="let item of order.orderItems">{{ item.name }}</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -21,6 +21,8 @@ export class CheckoutComponent implements OnInit {
   totalOrder: number = 0; // Khởi tạo thuộc tính để lưu tổng đơn hàng
   cartItems: any[] = [];
   paymentMethodSelected: boolean = false;
+  showBankTransferImage: boolean = false; // Thuộc tính để kiểm soát việc hiển thị hình ảnh
+
   
 
   constructor(private route: ActivatedRoute, private db: AngularFireDatabase, private router: Router, private zone: NgZone) {}
@@ -41,7 +43,19 @@ export class CheckoutComponent implements OnInit {
   
     const zipCodeRegex = /^\d{9,10}$/;
     const stateRegex = /^[a-zA-Z\s]{2,}$/;
-  
+    const bankTransfer = document.getElementById('banktransfer') as HTMLInputElement;
+    if (directCheckElement && bankTransfer) {
+      if (directCheckElement.checked) {
+        this.paymentMethodSelected = true;
+        this.showBankTransferImage = false; // Không hiển thị hình ảnh khi chọn direct check
+      } else if (bankTransfer.checked) {
+        this.paymentMethodSelected = true;
+        this.showBankTransferImage = true; // Hiển thị hình ảnh khi chọn bank transfer
+      } else {
+        this.paymentMethodSelected = false;
+        this.showBankTransferImage = false; // Mặc định không hiển thị hình ảnh
+      }
+    }
     if (!directCheckElement || !fullNameValue) {
       alert('Please enter your full name.');
       return;
@@ -223,7 +237,13 @@ export class CheckoutComponent implements OnInit {
       });
     });
   }
-  
+  updateBankTransferImageVisibility() {
+    const bankTransfer = document.getElementById('banktransfer') as HTMLInputElement;
+    if (bankTransfer) {
+        this.showBankTransferImage = bankTransfer.checked;
+    }
+}
+
   calculateShippingFee(totalPrice: number): number {
     const shippingFeePerTen = 0.5;
     const shippingFee = Math.floor(totalPrice / 10) * shippingFeePerTen;
